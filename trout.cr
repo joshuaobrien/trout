@@ -4,7 +4,7 @@ require "trie"
 module Trout
   class Base
     def initialize
-      @routes = Trie(-> String).new
+      @routes = Trie(HTTP::Server::Context-> HTTP::Server::Context).new
     end
 
     def swim
@@ -17,7 +17,7 @@ module Trout
 
           if (node = @routes.search(base.to_s))
             if (data = node.data)
-              context.response.print data.call
+              data.call(context)
             end
           end
         else
@@ -29,11 +29,11 @@ module Trout
       server.listen
     end
 
-    def get(route, &block : -> String)
+    def get(route, &block : HTTP::Server::Context -> HTTP::Server::Context)
       @routes.add("GET:" + route.to_s, block)
     end
 
-    def post(route, &block : -> String)
+    def post(route, &block : String -> String)
       @routes.add("POST:" + route.to_s, block)
     end
   end
