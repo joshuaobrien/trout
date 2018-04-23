@@ -1,0 +1,5 @@
+name: trout
+version: 0.01
+dependencies:
+  trie:
+    github: joshuaobrien/trie
